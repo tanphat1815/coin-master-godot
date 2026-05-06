@@ -1,0 +1,49 @@
+# Godot 4.x specific
+.godot/
+import/
+.mono/
+*.godot
+*.import
+
+# OS generated
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.lnk
+
+# IDE / Editor
+.vscode/
+.vs/
+*.code-workspace
+*.swp
+*.swo
+*~
+.idea/
+*.sublime-*
+
+# Build output (if building native exports)
+bin/
+build/
+out/
+
+# Godot export templates (can be large, regenerate on each machine)
+export/
+export_presets.cfg
+
+# Logs
+*.log
+
+# Temp / Cache
+tmp/
+temp/
+cache/
+
+# User-specific settings (keep project.godot, discard local settings)
+.editorcfg
+.editorconfig
