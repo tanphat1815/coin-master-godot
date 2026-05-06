@@ -75,4 +75,4 @@ func _on_spin_completed(result: Dictionary) -> void:
 	SaveLoadManager.add_coins(extra_coins)
 	SaveLoadManager.save_game()
 
-	print("[Event_CoinCraze] Bonus: +%,d coins (base: %,d)" % [extra_coins, base_reward])
+	print("[Event_CoinCraze] Bonus: +%d coins (base: %d)" % [extra_coins, base_reward])

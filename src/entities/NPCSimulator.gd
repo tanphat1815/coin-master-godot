@@ -240,7 +240,7 @@ func _compute_attack_count(delta_seconds: float) -> int:
     return min(raw_count, MAX_OFFLINE_ATTACKS)
 
 
-func _resolve_single_attack(attack_index: int, npc_profile: Dictionary) -> Dictionary:
+func _resolve_single_attack(attack_index: int, _npc_profile: Dictionary) -> Dictionary:
     var outcome: Dictionary = {
         "blocked_by_rhino":      false,
         "blocked_by_shield":    false,
@@ -364,9 +364,22 @@ func _build_offline_attack_log_entry(npc_profile: Dictionary, outcome: Dictionar
 
 
 func _is_rhino_active() -> bool:
+    var now: int = int(Time.get_unix_time_from_system())
+
+    # ── Check real Rhino pet ──────────────────────────────────────────────
     var rhino_state: Dictionary = SaveLoadManager.pet_state.get("rhino", {})
-    var active_until: int = int(rhino_state.get("active_until_timestamp", 0))
-    return int(Time.get_unix_time_from_system()) < active_until
+    var rhino_expires: int = int(rhino_state.get("active_until_timestamp", 0))
+    if now < rhino_expires:
+        return true
+
+    # ── Check Viking Raid Protection buff ───────────────────────────────────
+    var viking_protection: Dictionary = SaveLoadManager.pet_state.get("viking_raid_protection", {})
+    var viking_expires: int = int(viking_protection.get("active_until_timestamp", 0))
+    if now < viking_expires:
+        print("[NPCSimulator] Attack blocked by Viking Raid Protection (until %d)." % viking_expires)
+        return true
+
+    return false
 
 
 # ==============================================================================

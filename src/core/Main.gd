@@ -38,8 +38,12 @@ func _ready() -> void:
 	else:
 		push_error("[Main] SlotMachinePanel.tscn not found at res://src/ui/SlotMachinePanel.tscn.")
 
-	# ── 4. Event System (Step 7) ─────────────────────────────────────────────
+	# ── 4. Event System (Step 7 + Step 8) ─────────────────────────────────────
 	EventManager.register_event(Event_CoinCraze.new())
+
+	var viking_quest: Event_VikingQuest = Event_VikingQuest.new()
+	EventManager.register_event(viking_quest)
+
 	print("[Main] Events registered.")
 
 	# ── 5. Wire SaveLoadManager → NPCSimulator ─────────────────────────────
@@ -58,11 +62,11 @@ func _on_save_game_loaded() -> void:
 		npc_simulator.calculate_offline_events()
 
 
-func _on_raid_triggered(raid_count: int) -> void:
+func _on_raid_triggered(_raid_count: int) -> void:
 	if npc_simulator != null:
 		npc_simulator.generate_raid_target()
 
 
-func _on_attack_triggered(attack_count: int) -> void:
+func _on_attack_triggered(_attack_count: int) -> void:
 	if npc_simulator != null:
-		npc_simulator.on_live_attack_triggered(attack_count)
+		npc_simulator.on_live_attack_triggered(_attack_count)

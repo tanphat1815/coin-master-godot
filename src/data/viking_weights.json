@@ -1,0 +1,71 @@
+{
+  "config": {
+    "display_name": "Viking Quest",
+    "description": "Spin for massive coin rewards!"
+  },
+  "outcomes": [
+    {
+      "id": "viking_coins_small",
+      "label": "Small Bounty",
+      "weight": 280,
+      "reward_type": "coins",
+      "reward_value": 500,
+      "triggers_raid_protection": false
+    },
+    {
+      "id": "viking_coins_medium",
+      "label": "Medium Bounty",
+      "weight": 200,
+      "reward_type": "coins",
+      "reward_value": 2000,
+      "triggers_raid_protection": false
+    },
+    {
+      "id": "viking_coins_large",
+      "label": "Large Bounty",
+      "weight": 100,
+      "reward_type": "coins",
+      "reward_value": 8000,
+      "triggers_raid_protection": false
+    },
+    {
+      "id": "viking_coins_mega",
+      "label": "Mega Bounty",
+      "weight": 30,
+      "reward_type": "coins",
+      "reward_value": 25000,
+      "triggers_raid_protection": false
+    },
+    {
+      "id": "viking_coins_ultra",
+      "label": "Ultra Bounty",
+      "weight": 5,
+      "reward_type": "coins",
+      "reward_value": 100000,
+      "triggers_raid_protection": false
+    },
+    {
+      "id": "viking_protected_spin",
+      "label": "Protected Spin",
+      "weight": 200,
+      "reward_type": "coins",
+      "reward_value": 1000,
+      "triggers_raid_protection": true
+    },
+    {
+      "id": "viking_raid_protection",
+      "label": "Raid Protection!",
+      "weight": 185,
+      "reward_type": "raid_protection",
+      "reward_value": 0,
+      "triggers_raid_protection": false
+    }
+  ],
+  "progress_tiers": [
+    { "id": "tier_1", "threshold": 5000,  "reward_coins": 5000,  "label": "Tier 1 Reward" },
+    { "id": "tier_2", "threshold": 20000, "reward_coins": 20000, "label": "Tier 2 Reward" },
+    { "id": "tier_3", "threshold": 50000, "reward_coins": 50000, "label": "Tier 3 Reward" },
+    { "id": "tier_4", "threshold": 100000, "reward_coins": 100000, "label": "Tier 4 Reward" },
+    { "id": "tier_5", "threshold": 200000, "reward_coins": 200000, "label": "Jackpot!" }
+  ]
+}
