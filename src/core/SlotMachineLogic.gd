@@ -33,6 +33,9 @@ var _is_initialized: bool = false
 ## Cache of the RandomNumberGenerator instance.
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
+## Singleton instance — set in _ready(), used by non-node systems to access signals.
+static var _instance: SlotMachineLogic = null
+
 ## Emitted when a spin completes successfully.
 signal spin_completed(result: Dictionary)
 
@@ -55,6 +58,7 @@ signal attack_triggered(attack_count: int)
 func _ready() -> void:
     _rng.randomize()
     _load_weights_config()
+    _instance = self
 
 
 func _load_weights_config() -> void:
@@ -300,3 +304,8 @@ func can_spin(bet_multiplier: int) -> bool:
 
 func is_initialized() -> bool:
     return _is_initialized
+
+
+## Returns the singleton instance, or null if not yet instantiated.
+static func get_instance() -> SlotMachineLogic:
+    return _instance
