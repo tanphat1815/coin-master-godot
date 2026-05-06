@@ -23,6 +23,7 @@ config/icon="res://icon.svg"
 
 SaveLoadManager="*res://src/utils/SaveLoadManager.gd"
 EventManager="*res://src/events/EventManager.gd"
+PetManager="*res://src/core/PetManager.gd"
 
 [display]
 

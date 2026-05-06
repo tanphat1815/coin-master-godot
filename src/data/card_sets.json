@@ -1,0 +1,55 @@
+{
+  "sets": [
+    {
+      "id": "set_viking",
+      "name": "Viking Adventure",
+      "theme": "Lands of Vikings",
+      "cards": [
+        { "id": "vk_001", "name": "Viking Longship",  "star": 1 },
+        { "id": "vk_002", "name": "Ax Warrior",       "star": 1 },
+        { "id": "vk_003", "name": "Berserker Rage",   "star": 2 },
+        { "id": "vk_004", "name": "Shield Maiden",     "star": 2 },
+        { "id": "vk_005", "name": "Raven Banner",      "star": 3 },
+        { "id": "vk_006", "name": "Dragon Helm",       "star": 3 },
+        { "id": "vk_007", "name": "Thor's Hammer",     "star": 4 },
+        { "id": "vk_008", "name": "Valhalla Gate",     "star": 5 }
+      ],
+      "completion_reward_spins": 50,
+      "completion_reward_coins": 100000
+    },
+    {
+      "id": "set_egypt",
+      "name": "Ancient Egypt",
+      "theme": "Ancient Egypt",
+      "cards": [
+        { "id": "eg_001", "name": "Pharaoh's Curse",   "star": 1 },
+        { "id": "eg_002", "name": "Scarab Beetle",     "star": 1 },
+        { "id": "eg_003", "name": "Hieroglyph Tablet", "star": 2 },
+        { "id": "eg_004", "name": "Anubis Guardian",   "star": 2 },
+        { "id": "eg_005", "name": "Pyramid Power",      "star": 3 },
+        { "id": "eg_006", "name": "Nile Serpent",       "star": 3 },
+        { "id": "eg_007", "name": "Eye of Horus",       "star": 4 },
+        { "id": "eg_008", "name": "Pharaoh's Tomb",    "star": 5 }
+      ],
+      "completion_reward_spins": 50,
+      "completion_reward_coins": 100000
+    },
+    {
+      "id": "set_alps",
+      "name": "Snowy Alps",
+      "theme": "Snowy Alps",
+      "cards": [
+        { "id": "al_001", "name": "Ice Crystal",      "star": 1 },
+        { "id": "al_002", "name": "Frost Giant",       "star": 1 },
+        { "id": "al_003", "name": "Avalanche",         "star": 2 },
+        { "id": "al_004", "name": "Mountain Shrine",   "star": 2 },
+        { "id": "al_005", "name": "Yodel Champion",    "star": 3 },
+        { "id": "al_006", "name": "Alpine Wolf",       "star": 3 },
+        { "id": "al_007", "name": "Summit Treasure",   "star": 4 },
+        { "id": "al_008", "name": "Eternal Glacier",   "star": 5 }
+      ],
+      "completion_reward_spins": 50,
+      "completion_reward_coins": 100000
+    }
+  ]
+}

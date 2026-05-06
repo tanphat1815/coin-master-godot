@@ -30,6 +30,7 @@ var forced_outcome_id: String = ""
 
 # ── Subsystems ────────────────────────────────────────────────────────────────
 var pet_state: Dictionary = {}
+var card_collection: Dictionary = {}
 var event_flags: Dictionary = {}
 
 # ── Internal ──────────────────────────────────────────────────────────────────
@@ -56,6 +57,12 @@ func _apply_defaults() -> void:
             "tiger": { "xp": 0, "level": 1, "active_until_timestamp": 0 },
             "rhino": { "xp": 0, "level": 1, "active_until_timestamp": 0 }
         }
+    if card_collection.is_empty():
+        card_collection = {
+            "owned_card_ids":   [],
+            "completed_sets":   [],
+            "total_duplicates": 0
+        }
     if event_flags.is_empty():
         event_flags = {
             "coin_craze":     { "is_active": false, "start_timestamp": 0, "end_timestamp": 0 },
@@ -78,6 +85,7 @@ func _build_save_dictionary() -> Dictionary:
         "purchased_one_time_offers": purchased_one_time_offers.duplicate(),
         "forced_outcome_id":         forced_outcome_id,
         "pet_state":                 pet_state.duplicate(true),
+        "card_collection":           card_collection.duplicate(true),
         "event_flags":               event_flags.duplicate(true)
     }
 
@@ -217,6 +225,20 @@ func _apply_state_from_dictionary(data: Dictionary) -> void:
     else:
         event_flags = {}
 
+    var raw_cards = data.get("card_collection", {})
+    if raw_cards is Dictionary:
+        card_collection = {
+            "owned_card_ids":   Array(raw_cards.get("owned_card_ids", [])),
+            "completed_sets":   Array(raw_cards.get("completed_sets", [])),
+            "total_duplicates": int(raw_cards.get("total_duplicates", 0))
+        }
+    else:
+        card_collection = {
+            "owned_card_ids":   [],
+            "completed_sets":   [],
+            "total_duplicates": 0
+        }
+
     coins   = max(0, coins)
     spins   = max(0, spins)
     shields = clamp(shields, 0, 5)
@@ -234,6 +256,11 @@ func _handle_new_player() -> void:
     purchased_one_time_offers = []
     forced_outcome_id       = ""
     pet_state               = {}
+    card_collection         = {
+        "owned_card_ids":   [],
+        "completed_sets":   [],
+        "total_duplicates": 0
+    }
     event_flags             = {}
     _apply_defaults()
     _is_loaded = true

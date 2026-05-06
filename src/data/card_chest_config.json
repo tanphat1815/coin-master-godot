@@ -1,0 +1,49 @@
+{
+  "chests": [
+    {
+      "id": "chest_bronze",
+      "display_name": "Bronze Chest",
+      "cost_coins": 10000,
+      "cost_gems": 0,
+      "cards_per_open": 1,
+      "drop_pool": "all_cards",
+      "star_weights": {
+        "1": 50,
+        "2": 30,
+        "3": 15,
+        "4": 4,
+        "5": 1
+      }
+    },
+    {
+      "id": "chest_gold",
+      "display_name": "Gold Chest",
+      "cost_coins": 50000,
+      "cost_gems": 5,
+      "cards_per_open": 3,
+      "drop_pool": "all_cards",
+      "star_weights": {
+        "1": 30,
+        "2": 30,
+        "3": 25,
+        "4": 12,
+        "5": 3
+      }
+    },
+    {
+      "id": "chest_magic",
+      "display_name": "Magic Chest",
+      "cost_coins": 200000,
+      "cost_gems": 15,
+      "cards_per_open": 5,
+      "drop_pool": "all_cards",
+      "star_weights": {
+        "1": 15,
+        "2": 25,
+        "3": 35,
+        "4": 18,
+        "5": 7
+      }
+    }
+  ]
+}

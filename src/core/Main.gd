@@ -9,6 +9,7 @@ extends Node2D
 var slot_machine_logic: SlotMachineLogic
 var npc_simulator: NPCSimulator
 var slot_machine_ui: SlotMachineUI
+var card_manager: CardManager
 
 
 func _ready() -> void:
@@ -38,7 +39,13 @@ func _ready() -> void:
 	else:
 		push_error("[Main] SlotMachinePanel.tscn not found at res://src/ui/SlotMachinePanel.tscn.")
 
-	# ── 4. Event System (Step 7 + Step 8) ─────────────────────────────────────
+	# ── 4. Card Manager ────────────────────────────────────────────────────────
+	card_manager = CardManager.new()
+	card_manager.name = "CardManager"
+	add_child(card_manager)
+	print("[Main] CardManager instantiated.")
+
+	# ── 5. Event System (Step 7 + Step 8) ─────────────────────────────────────
 	EventManager.register_event(Event_CoinCraze.new())
 
 	var viking_quest: Event_VikingQuest = Event_VikingQuest.new()
@@ -46,10 +53,10 @@ func _ready() -> void:
 
 	print("[Main] Events registered.")
 
-	# ── 5. Wire SaveLoadManager → NPCSimulator ─────────────────────────────
+	# ── 6. Wire SaveLoadManager → NPCSimulator ─────────────────────────────
 	SaveLoadManager.game_loaded.connect(_on_save_game_loaded)
 
-	# ── 6. Wire SlotMachineLogic → NPCSimulator ──────────────────────────────────
+	# ── 7. Wire SlotMachineLogic → NPCSimulator ──────────────────────────────────
 	if slot_machine_logic != null:
 		slot_machine_logic.raid_triggered.connect(_on_raid_triggered)
 		slot_machine_logic.attack_triggered.connect(_on_attack_triggered)

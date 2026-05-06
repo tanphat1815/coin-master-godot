@@ -162,6 +162,11 @@ func generate_raid_target() -> Dictionary:
     var variance_factor: float = 1.0 + _rng.randf_range(-RAID_LOOT_VARIANCE, RAID_LOOT_VARIANCE)
     var loot_pool: int = max(1, int(float(base_loot) * variance_factor))
 
+    # ── Foxy Raid Loot Boost ───────────────────────────────────────────────────
+    if _is_foxy_active():
+        loot_pool = int(float(loot_pool) * PetManager.FOXY_RAID_MULTIPLIER)
+        print("[NPCSimulator] Foxy active! Raid loot boosted to: %,d" % loot_pool)
+
     var is_protected: bool = _rng.randf() < 0.30
     if is_protected:
         loot_pool = max(1, int(float(loot_pool) * 0.5))
@@ -190,14 +195,21 @@ func on_live_attack_triggered(attack_count: int) -> void:
         var target_item_index: int = _rng.randi_range(0, ITEMS_PER_VILLAGE - 1)
         var npc_item_current_level: int = _rng.randi_range(1, MAX_ITEM_LEVEL)
 
+        # ── Tiger Attack Loot Boost ─────────────────────────────────────────────
+        var loot_bonus: int = 0
+        if _is_tiger_active():
+            loot_bonus = int(float(npc_village_level) * 1000.0 * (PetManager.TIGER_ATTACK_MULTIPLIER - 1.0))
+            print("[NPCSimulator] Tiger active! Attack loot bonus: %,d" % loot_bonus)
+
         var live_attack: Dictionary = {
-            "npc_name":             npc_profile.get("name", "Unknown"),
-            "avatar_id":            npc_profile.get("avatar_id", AVATAR_ID_MIN),
-            "npc_village_level":    npc_village_level,
-            "target_item_index":    target_item_index,
+            "npc_name":              npc_profile.get("name", "Unknown"),
+            "avatar_id":             npc_profile.get("avatar_id", AVATAR_ID_MIN),
+            "npc_village_level":     npc_village_level,
+            "target_item_index":     target_item_index,
             "npc_item_before_level": npc_item_current_level,
-            "npc_item_after_level": max(0, npc_item_current_level - 1),
-            "attack_index":         i
+            "npc_item_after_level":  max(0, npc_item_current_level - 1),
+            "attack_index":          i,
+            "tiger_loot_bonus":      loot_bonus
         }
 
         emit_signal("live_attack_resolved", live_attack)
@@ -366,7 +378,7 @@ func _build_offline_attack_log_entry(npc_profile: Dictionary, outcome: Dictionar
 func _is_rhino_active() -> bool:
     var now: int = int(Time.get_unix_time_from_system())
 
-    # ── Check real Rhino pet ──────────────────────────────────────────────
+    # ── Check real Rhino pet ──────────────────────────────────────────────────
     var rhino_state: Dictionary = SaveLoadManager.pet_state.get("rhino", {})
     var rhino_expires: int = int(rhino_state.get("active_until_timestamp", 0))
     if now < rhino_expires:
@@ -380,6 +392,18 @@ func _is_rhino_active() -> bool:
         return true
 
     return false
+
+
+func _is_foxy_active() -> bool:
+    var foxy_data: Dictionary = SaveLoadManager.pet_state.get("foxy", {})
+    var expires_at: int = int(foxy_data.get("active_until_timestamp", 0))
+    return int(Time.get_unix_time_from_system()) < expires_at
+
+
+func _is_tiger_active() -> bool:
+    var tiger_data: Dictionary = SaveLoadManager.pet_state.get("tiger", {})
+    var expires_at: int = int(tiger_data.get("active_until_timestamp", 0))
+    return int(Time.get_unix_time_from_system()) < expires_at
 
 
 # ==============================================================================
