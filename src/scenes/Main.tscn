@@ -1,6 +1,80 @@
-[gd_scene load_steps=2 format=3 uid="uid://placeholder_main"]
+[gd_scene load_steps=3 format=3 uid="uid://placeholder_main"]
 
 [ext_resource type="Script" path="res://src/core/Main.gd" id="1"]
+[ext_resource type="Script" path="res://src/ui/MainHUD.gd" id="2_hud"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1")
+
+[node name="SlotMachineLogic" type="Node" parent="."]
+
+[node name="HUDCanvas" type="CanvasLayer" parent="."]
+
+[node name="MainHUD" type="Control" parent="HUDCanvas"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_hud")
+
+[node name="CoinPanel" type="HBoxContainer" parent="HUDCanvas/MainHUD"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -150.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = 50.0
+grow_horizontal = 0
+alignment = 2
+
+[node name="CoinIcon" type="Label" parent="HUDCanvas/MainHUD/CoinPanel"]
+layout_mode = 2
+text = "🪙"
+
+[node name="CoinLabel" type="Label" parent="HUDCanvas/MainHUD/CoinPanel"]
+layout_mode = 2
+text = "0"
+
+[node name="SpinPanel" type="HBoxContainer" parent="HUDCanvas/MainHUD"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -300.0
+offset_top = 10.0
+offset_right = -160.0
+offset_bottom = 50.0
+grow_horizontal = 0
+alignment = 2
+
+[node name="SpinIcon" type="Label" parent="HUDCanvas/MainHUD/SpinPanel"]
+layout_mode = 2
+text = "🔄"
+
+[node name="SpinLabel" type="Label" parent="HUDCanvas/MainHUD/SpinPanel"]
+layout_mode = 2
+text = "0"
+
+[node name="ShieldPanel" type="HBoxContainer" parent="HUDCanvas/MainHUD"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -450.0
+offset_top = 10.0
+offset_right = -310.0
+offset_bottom = 50.0
+grow_horizontal = 0
+alignment = 2
+
+[node name="ShieldIcon" type="Label" parent="HUDCanvas/MainHUD/ShieldPanel"]
+layout_mode = 2
+text = "🛡️"
+
+[node name="ShieldLabel" type="Label" parent="HUDCanvas/MainHUD/ShieldPanel"]
+layout_mode = 2
+text = "0/5"

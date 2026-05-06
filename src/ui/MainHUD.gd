@@ -1,0 +1,79 @@
+# ==============================================================================
+# MainHUD.gd
+# Path: res://src/ui/MainHUD.gd
+# Role: Persistent top-screen resource counters. Pure View — zero game logic.
+# Access pattern: Attached to a CanvasLayer/HBoxContainer node in Main.tscn.
+# Signals: Subscribes to SaveLoadManager signals. Emits no signals.
+# ==============================================================================
+extends Control
+class_name MainHUD
+
+var _coin_label: Label
+var _spin_label: Label
+var _shield_label: Label
+
+
+func _ready() -> void:
+    _coin_label   = $CoinPanel/CoinLabel   as Label
+    _spin_label   = $SpinPanel/SpinLabel   as Label
+    _shield_label = $ShieldPanel/ShieldLabel as Label
+
+    if _coin_label == null:
+        push_warning("[MainHUD] CoinLabel not found at $CoinPanel/CoinLabel.")
+    if _spin_label == null:
+        push_warning("[MainHUD] SpinLabel not found at $SpinPanel/SpinLabel.")
+    if _shield_label == null:
+        push_warning("[MainHUD] ShieldLabel not found at $ShieldPanel/ShieldLabel.")
+
+    SaveLoadManager.coins_changed.connect(_on_coins_changed)
+    SaveLoadManager.spins_changed.connect(_on_spins_changed)
+    SaveLoadManager.shields_changed.connect(_on_shields_changed)
+
+    _update_coin_label(SaveLoadManager.coins)
+    _update_spin_label(SaveLoadManager.spins)
+    _update_shield_label(SaveLoadManager.shields)
+
+    print("[MainHUD] Initialized. Coins: %d | Spins: %d | Shields: %d" % [
+        SaveLoadManager.coins, SaveLoadManager.spins, SaveLoadManager.shields
+    ])
+
+
+func _exit_tree() -> void:
+    if SaveLoadManager:
+        if SaveLoadManager.coins_changed.has_connections():
+            SaveLoadManager.coins_changed.disconnect(_on_coins_changed)
+        if SaveLoadManager.spins_changed.has_connections():
+            SaveLoadManager.spins_changed.disconnect(_on_spins_changed)
+        if SaveLoadManager.shields_changed.has_connections():
+            SaveLoadManager.shields_changed.disconnect(_on_shields_changed)
+
+
+# ─── Signal Callbacks ────────────────────────────────────────────────────────────
+
+func _on_coins_changed(new_value: int) -> void:
+    _update_coin_label(new_value)
+
+
+func _on_spins_changed(new_value: int) -> void:
+    _update_spin_label(new_value)
+
+
+func _on_shields_changed(new_value: int) -> void:
+    _update_shield_label(new_value)
+
+
+# ─── Label Update Helpers ────────────────────────────────────────────────────────
+
+func _update_coin_label(value: int) -> void:
+    if _coin_label != null:
+        _coin_label.text = "%,d" % value
+
+
+func _update_spin_label(value: int) -> void:
+    if _spin_label != null:
+        _spin_label.text = "%,d" % value
+
+
+func _update_shield_label(value: int) -> void:
+    if _shield_label != null:
+        _shield_label.text = "%d/5" % value
