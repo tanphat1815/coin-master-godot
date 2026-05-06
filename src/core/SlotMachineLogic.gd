@@ -169,68 +169,77 @@ func spin_reels(bet_multiplier: int) -> Dictionary:
 	var outcome_id: String  = str(selected_outcome.get("id", "coins_small"))
 	var base_reward: int    = int(selected_outcome.get("reward_value", 0))
 
-	# ── Shield Cap Interception ─────────────────────────────────────────────────
-	if reward_type == "shield" and SaveLoadManager.shields >= SHIELD_MAX_HELD:
-		SaveLoadManager.add_spins(bet_multiplier)
-		SaveLoadManager.add_coins(_shield_overflow_coin_compensation)
-		emit_signal("shield_overflow_intercepted", _shield_overflow_coin_compensation)
-
-		var intercept_result: Dictionary = {
-			"success":            true,
-			"outcome_id":         outcome_id,
-			"reward_type":        reward_type,
-			"reward_value":       0,
-			"reward_tier":        reward_tier,
-			"bet_multiplier":     bet_multiplier,
-			"was_intercepted":    true,
-			"compensation_coins":  _shield_overflow_coin_compensation,
-			"error_reason":       "",
-			"triggers_raid":      false,
-			"triggers_attack":    false
-		}
-		SaveLoadManager.save_game()
-		emit_signal("spin_completed", intercept_result)
-		print("[SlotMachineLogic] Shield overflow intercepted. Compensation coins: %d" % _shield_overflow_coin_compensation)
-		return intercept_result
-
-	# ── Final Reward Calculation ────────────────────────────────────────────────
+	# ── Shield Cap Interception (Step 11: scaled by bet_multiplier) ──────────────
 	var final_reward_value: int = 0
+	var attack_phases: int      = 0
+	var raid_dig_slots: int    = 0
+	var shields_awarded: int   = 0
+	var was_intercepted: bool  = false
+	var compensation_coins: int = 0
+
+	if reward_type == "shield":
+		var scaled: int = base_reward * bet_multiplier
+		var can_hold: int = SHIELD_MAX_HELD - SaveLoadManager.shields
+		var to_award: int = mini(scaled, can_hold)
+
+		if to_award <= 0:
+			SaveLoadManager.add_spins(bet_multiplier)
+			SaveLoadManager.add_coins(_shield_overflow_coin_compensation)
+			emit_signal("shield_overflow_intercepted", _shield_overflow_coin_compensation)
+			was_intercepted = true
+			compensation_coins = _shield_overflow_coin_compensation
+			final_reward_value = 0
+			shields_awarded = 0
+		else:
+			SaveLoadManager.add_shields(to_award)
+			final_reward_value = to_award
+			shields_awarded = to_award
+			was_intercepted = false
+
+	# ── Final Reward Calculation ──────────────────────────────────────────────────
 	match reward_type:
 		"coins":
 			final_reward_value = base_reward * bet_multiplier
 			SaveLoadManager.add_coins(final_reward_value)
 		"spins":
-			final_reward_value = base_reward
+			final_reward_value = base_reward * bet_multiplier
 			SaveLoadManager.add_spins(final_reward_value)
-		"shield":
-			final_reward_value = base_reward
-			SaveLoadManager.add_shields(final_reward_value)
 		"attack":
-			final_reward_value = base_reward
+			# x10 Attack = x10 treasure from ONE village (base_reward phases).
+			final_reward_value = base_reward * bet_multiplier
+			attack_phases = base_reward  # Always 1 village; only treasure is multiplied.
 		"raid":
-			final_reward_value = base_reward
+			final_reward_value = base_reward * bet_multiplier
+			raid_dig_slots = final_reward_value
+		"shield":
+			pass  # Already handled above.
 		_:
 			push_warning("[SlotMachineLogic] Unknown reward_type '%s'. No resource awarded." % reward_type)
 
 	# ── Post-Award Signal Emission ──────────────────────────────────────────────
-	if reward_type == "raid":
+	if reward_type == "raid" and not was_intercepted:
 		emit_signal("raid_triggered", final_reward_value)
-	if reward_type == "attack":
+	if reward_type == "attack" and not was_intercepted:
 		emit_signal("attack_triggered", final_reward_value)
 
 	# ── Result Construction ─────────────────────────────────────────────────────
 	var result: Dictionary = {
-		"success":            true,
-		"outcome_id":         outcome_id,
-		"reward_type":        reward_type,
-		"reward_value":       final_reward_value,
-		"reward_tier":        reward_tier,
-		"bet_multiplier":     bet_multiplier,
-		"was_intercepted":    false,
-		"compensation_coins": 0,
-		"error_reason":       "",
-		"triggers_raid":      reward_type == "raid",
-		"triggers_attack":    reward_type == "attack"
+		"success":               true,
+		"outcome_id":            outcome_id,
+		"reward_type":           reward_type,
+		"reward_value":          final_reward_value,
+		"reward_tier":           reward_tier,
+		"bet_multiplier":        bet_multiplier,
+		"was_intercepted":       was_intercepted,
+		"compensation_coins":     compensation_coins,
+		"error_reason":          "",
+		"triggers_raid":         reward_type == "raid" and not was_intercepted,
+		"triggers_attack":       reward_type == "attack" and not was_intercepted,
+		"attack_phases":         attack_phases,
+		"raid_dig_slots":        raid_dig_slots,
+		"shields_awarded":       shields_awarded,
+		"bet_multiplier_applied": bet_multiplier,
+		"event_points_awarded":   0
 	}
 
 	SaveLoadManager.save_game()
@@ -270,17 +279,22 @@ func _resolve_outcome_id() -> Dictionary:
 
 func _build_failure_dict(bet_multiplier: int, reason: String) -> Dictionary:
 	return {
-		"success":            false,
-		"outcome_id":         "",
-		"reward_type":        "",
-		"reward_value":       0,
-		"reward_tier":        "",
-		"bet_multiplier":     bet_multiplier,
-		"was_intercepted":    false,
-		"compensation_coins": 0,
-		"error_reason":       reason,
-		"triggers_raid":      false,
-		"triggers_attack":    false
+		"success":               false,
+		"outcome_id":            "",
+		"reward_type":           "",
+		"reward_value":         0,
+		"reward_tier":          "",
+		"bet_multiplier":        bet_multiplier,
+		"was_intercepted":      false,
+		"compensation_coins":    0,
+		"error_reason":         reason,
+		"triggers_raid":        false,
+		"triggers_attack":      false,
+		"attack_phases":        0,
+		"raid_dig_slots":       0,
+		"shields_awarded":      0,
+		"bet_multiplier_applied": bet_multiplier,
+		"event_points_awarded":  0
 	}
 
 
