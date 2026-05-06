@@ -148,10 +148,9 @@ func load_game() -> void:
 
 
 func _flush_indexeddb_if_html5() -> void:
+    # On non-Web platforms this is a no-op. On Web, OS.get_name() == "Web"
+    # is already confirmed, so JavaScriptBridge.eval() is safe to call.
     if OS.get_name() != "Web":
-        return
-    if not JavaScriptBridge.is_js_available():
-        push_warning("[SaveLoadManager] JavaScriptBridge unavailable. IndexedDB flush skipped.")
         return
 
     JavaScriptBridge.eval("""
