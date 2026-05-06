@@ -1,0 +1,121 @@
+{
+  "outcomes": [
+    {
+      "id": "coins_small",
+      "label": "Coin",
+      "weight": 340,
+      "reward_type": "coins",
+      "reward_value": 50,
+      "reward_tier": "small",
+      "three_of_a_kind_only": false,
+      "max_held": null
+    },
+    {
+      "id": "coins_medium",
+      "label": "Coin Bag",
+      "weight": 210,
+      "reward_type": "coins",
+      "reward_value": 200,
+      "reward_tier": "medium",
+      "three_of_a_kind_only": false,
+      "max_held": null
+    },
+    {
+      "id": "coins_large",
+      "label": "Coin Chest",
+      "weight": 95,
+      "reward_type": "coins",
+      "reward_value": 800,
+      "reward_tier": "large",
+      "three_of_a_kind_only": true,
+      "max_held": null
+    },
+    {
+      "id": "coins_jackpot",
+      "label": "Coin Hoard",
+      "weight": 12,
+      "reward_type": "coins",
+      "reward_value": 5000,
+      "reward_tier": "jackpot",
+      "three_of_a_kind_only": true,
+      "max_held": null
+    },
+    {
+      "id": "spins_single",
+      "label": "Energy Capsule",
+      "weight": 75,
+      "reward_type": "spins",
+      "reward_value": 1,
+      "reward_tier": "small",
+      "three_of_a_kind_only": false,
+      "max_held": null
+    },
+    {
+      "id": "spins_bonus",
+      "label": "Energy Crate",
+      "weight": 28,
+      "reward_type": "spins",
+      "reward_value": 5,
+      "reward_tier": "medium",
+      "three_of_a_kind_only": true,
+      "max_held": null
+    },
+    {
+      "id": "shield_single",
+      "label": "Shield",
+      "weight": 88,
+      "reward_type": "shield",
+      "reward_value": 1,
+      "reward_tier": "small",
+      "three_of_a_kind_only": false,
+      "max_held": 5
+    },
+    {
+      "id": "attack_single",
+      "label": "Hammer",
+      "weight": 72,
+      "reward_type": "attack",
+      "reward_value": 1,
+      "reward_tier": "small",
+      "three_of_a_kind_only": false,
+      "max_held": null
+    },
+    {
+      "id": "attack_triple",
+      "label": "Wrecking Ball",
+      "weight": 18,
+      "reward_type": "attack",
+      "reward_value": 3,
+      "reward_tier": "large",
+      "three_of_a_kind_only": true,
+      "max_held": null
+    },
+    {
+      "id": "raid_single",
+      "label": "Pig Bandit",
+      "weight": 55,
+      "reward_type": "raid",
+      "reward_value": 1,
+      "reward_tier": "small",
+      "three_of_a_kind_only": false,
+      "max_held": null
+    },
+    {
+      "id": "raid_triple",
+      "label": "Pirate Fleet",
+      "weight": 7,
+      "reward_type": "raid",
+      "reward_value": 3,
+      "reward_tier": "jackpot",
+      "three_of_a_kind_only": true,
+      "max_held": null
+    }
+  ],
+  "_meta": {
+    "total_weight_sum": 1000,
+    "note": "total_weight_sum is informational only. SlotMachineLogic.gd MUST compute the real sum dynamically at runtime from the array. Do not hardcode 1000 in logic.",
+    "shield_overflow_behavior": "If shield outcome is selected but player.shields >= max_held, intercept: refund the spin cost and award coins_small.reward_value instead.",
+    "rng_override_key": "forced_outcome_id",
+    "rng_override_note": "If SaveLoadManager contains a non-null forced_outcome_id key, SlotMachineLogic bypasses weighted selection and returns that outcome directly. TrainerConsole writes this key. Logic layer clears it after one use."
+  }
+}

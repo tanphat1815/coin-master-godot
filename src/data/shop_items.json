@@ -1,0 +1,169 @@
+{
+  "products": [
+    {
+      "id": "starter_pack_001",
+      "display_name": "Starter Bundle",
+      "description": "The perfect launchpad for new villages.",
+      "category": "starter_pack",
+      "price_usd": 1.99,
+      "currency_tag": "$",
+      "rewards": {
+        "spins": 45,
+        "coins": 500000,
+        "gems": 5
+      },
+      "badge": "NEW PLAYER",
+      "is_one_time_offer": true,
+      "sort_order": 1
+    },
+    {
+      "id": "spins_tiny_001",
+      "display_name": "Handful of Spins",
+      "description": "A small top-up to keep the reels turning.",
+      "category": "spins_bundle",
+      "price_usd": 1.99,
+      "currency_tag": "$",
+      "rewards": {
+        "spins": 30,
+        "coins": 0,
+        "gems": 0
+      },
+      "badge": null,
+      "is_one_time_offer": false,
+      "sort_order": 2
+    },
+    {
+      "id": "spins_small_001",
+      "display_name": "Spin Pouch",
+      "description": "Enough spins for a solid session.",
+      "category": "spins_bundle",
+      "price_usd": 4.99,
+      "currency_tag": "$",
+      "rewards": {
+        "spins": 80,
+        "coins": 0,
+        "gems": 2
+      },
+      "badge": null,
+      "is_one_time_offer": false,
+      "sort_order": 3
+    },
+    {
+      "id": "spins_medium_001",
+      "display_name": "Spin Sack",
+      "description": "Power through multiple villages.",
+      "category": "spins_bundle",
+      "price_usd": 9.99,
+      "currency_tag": "$",
+      "rewards": {
+        "spins": 200,
+        "coins": 1000000,
+        "gems": 5
+      },
+      "badge": "POPULAR",
+      "is_one_time_offer": false,
+      "sort_order": 4
+    },
+    {
+      "id": "spins_large_001",
+      "display_name": "Spin Barrel",
+      "description": "A serious investment for serious builders.",
+      "category": "spins_bundle",
+      "price_usd": 19.99,
+      "currency_tag": "$",
+      "rewards": {
+        "spins": 500,
+        "coins": 5000000,
+        "gems": 15
+      },
+      "badge": "BEST VALUE",
+      "is_one_time_offer": false,
+      "sort_order": 5
+    },
+    {
+      "id": "spins_xl_001",
+      "display_name": "Mega Spin Chest",
+      "description": "Dominate the leaderboard for days.",
+      "category": "spins_bundle",
+      "price_usd": 49.99,
+      "currency_tag": "$",
+      "rewards": {
+        "spins": 1500,
+        "coins": 20000000,
+        "gems": 50
+      },
+      "badge": "WHALE TIER",
+      "is_one_time_offer": false,
+      "sort_order": 6
+    },
+    {
+      "id": "coins_small_001",
+      "display_name": "Coin Purse",
+      "description": "Finish off that last village upgrade.",
+      "category": "coins_bundle",
+      "price_usd": 2.99,
+      "currency_tag": "$",
+      "rewards": {
+        "spins": 0,
+        "coins": 3000000,
+        "gems": 0
+      },
+      "badge": null,
+      "is_one_time_offer": false,
+      "sort_order": 7
+    },
+    {
+      "id": "coins_medium_001",
+      "display_name": "Coin Vault",
+      "description": "Complete two villages in one go.",
+      "category": "coins_bundle",
+      "price_usd": 9.99,
+      "currency_tag": "$",
+      "rewards": {
+        "spins": 10,
+        "coins": 15000000,
+        "gems": 3
+      },
+      "badge": null,
+      "is_one_time_offer": false,
+      "sort_order": 8
+    },
+    {
+      "id": "mixed_bundle_001",
+      "display_name": "Village Builder Pack",
+      "description": "Balanced resources to break through any wall.",
+      "category": "mixed_bundle",
+      "price_usd": 14.99,
+      "currency_tag": "$",
+      "rewards": {
+        "spins": 150,
+        "coins": 10000000,
+        "gems": 10
+      },
+      "badge": "LIMITED",
+      "is_one_time_offer": false,
+      "sort_order": 9
+    },
+    {
+      "id": "vip_pass_001",
+      "display_name": "Golden Pass — Season",
+      "description": "30-day pass: daily spin bonus, doubled event rewards, exclusive card chest every 3 days.",
+      "category": "vip_pass",
+      "price_usd": 9.99,
+      "currency_tag": "$",
+      "rewards": {
+        "spins": 50,
+        "coins": 2000000,
+        "gems": 20
+      },
+      "badge": "SEASON PASS",
+      "is_one_time_offer": false,
+      "sort_order": 10
+    }
+  ],
+  "_meta": {
+    "note": "price_usd and currency_tag are display-only in offline/desktop/web builds. The shop UI reads these fields for rendering only. On purchase confirmation in offline mode, inject rewards directly into SaveLoadManager state. No payment gateway is called. In future mobile builds, replace the purchase handler with Google Play Billing or Apple StoreKit using the same product id strings.",
+    "one_time_offer_save_key": "purchased_one_time_offers",
+    "one_time_offer_save_note": "SaveLoadManager must store an Array of purchased one-time offer id strings. Shop UI checks this array before rendering the buy button."
+  }
+}
