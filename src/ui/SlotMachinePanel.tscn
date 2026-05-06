@@ -2,6 +2,20 @@
 
 [ext_resource type="Script" path="res://src/ui/SlotMachineUI.gd" id="1_script"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_frame"]
+bg_color = Color(0.466667, 0.301961, 0.188235, 1)
+border_width_left = 8
+border_width_top = 40
+border_width_right = 8
+border_width_bottom = 20
+border_color = Color(0.282353, 0.176471, 0.101961, 1)
+corner_radius_top_left = 40
+corner_radius_top_right = 40
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+shadow_size = 10
+shadow_offset = Vector2(0, 10)
+
 [node name="SlotMachinePanel" type="Control"]
 layout_mode = 3
 anchors_preset = 8
@@ -9,25 +23,13 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -200.0
-offset_top = -250.0
-offset_right = 200.0
-offset_bottom = 250.0
+offset_left = -220.0
+offset_top = -280.0
+offset_right = 220.0
+offset_bottom = 280.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_script")
-
-[node name="Shadow" type="Panel" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 5.0
-offset_top = 5.0
-offset_right = 5.0
-offset_bottom = 5.0
-grow_horizontal = 2
-grow_vertical = 2
 
 [node name="MainFrame" type="Panel" parent="."]
 layout_mode = 1
@@ -36,17 +38,36 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_frame")
+
+[node name="HeaderLabel" type="Label" parent="MainFrame"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -100.0
+offset_top = 5.0
+offset_right = 100.0
+offset_bottom = 35.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 0.9, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 20
+text = "COIN MASTER"
+horizontal_alignment = 1
 
 [node name="ReelArea" type="Panel" parent="MainFrame"]
+clip_contents = true
 layout_mode = 1
-anchors_preset = 14
+anchors_preset = 8
+anchor_left = 0.5
 anchor_top = 0.5
-anchor_right = 1.0
+anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 20.0
-offset_top = -120.0
-offset_right = -20.0
-offset_bottom = 40.0
+offset_left = -195.0
+offset_top = -150.0
+offset_right = 195.0
+offset_bottom = 150.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -57,67 +78,211 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 15
 alignment = 1
 
-[node name="Reel1" type="ColorRect" parent="MainFrame/ReelArea/ReelContainer"]
+[node name="Reel1" type="Control" parent="MainFrame/ReelArea/ReelContainer"]
+clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 3
-color = Color(1, 1, 1, 1)
 
-[node name="Icon" type="TextureRect" parent="MainFrame/ReelArea/ReelContainer/Reel1"]
+[node name="BG" type="ColorRect" parent="MainFrame/ReelArea/ReelContainer/Reel1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Icons" type="Control" parent="MainFrame/ReelArea/ReelContainer/Reel1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="IconTop" type="TextureRect" parent="MainFrame/ReelArea/ReelContainer/Reel1/Icons"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -30.0
-offset_top = -30.0
-offset_right = 30.0
-offset_bottom = 30.0
+offset_left = -50.0
+offset_top = -150.0
+offset_right = 50.0
+offset_bottom = -50.0
 grow_horizontal = 2
 grow_vertical = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Reel2" type="ColorRect" parent="MainFrame/ReelArea/ReelContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-color = Color(1, 1, 1, 1)
-
-[node name="Icon" type="TextureRect" parent="MainFrame/ReelArea/ReelContainer/Reel2"]
+[node name="IconMid" type="TextureRect" parent="MainFrame/ReelArea/ReelContainer/Reel1/Icons"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -30.0
-offset_top = -30.0
-offset_right = 30.0
-offset_bottom = 30.0
+offset_left = -50.0
+offset_top = -50.0
+offset_right = 50.0
+offset_bottom = 50.0
 grow_horizontal = 2
 grow_vertical = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Reel3" type="ColorRect" parent="MainFrame/ReelArea/ReelContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-color = Color(1, 1, 1, 1)
-
-[node name="Icon" type="TextureRect" parent="MainFrame/ReelArea/ReelContainer/Reel3"]
+[node name="IconBot" type="TextureRect" parent="MainFrame/ReelArea/ReelContainer/Reel1/Icons"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -30.0
-offset_top = -30.0
-offset_right = 30.0
-offset_bottom = 30.0
+offset_left = -50.0
+offset_top = 50.0
+offset_right = 50.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Reel2" type="Control" parent="MainFrame/ReelArea/ReelContainer"]
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BG" type="ColorRect" parent="MainFrame/ReelArea/ReelContainer/Reel2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Icons" type="Control" parent="MainFrame/ReelArea/ReelContainer/Reel2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="IconTop" type="TextureRect" parent="MainFrame/ReelArea/ReelContainer/Reel2/Icons"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -150.0
+offset_right = 50.0
+offset_bottom = -50.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="IconMid" type="TextureRect" parent="MainFrame/ReelArea/ReelContainer/Reel2/Icons"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -50.0
+offset_right = 50.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="IconBot" type="TextureRect" parent="MainFrame/ReelArea/ReelContainer/Reel2/Icons"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = 50.0
+offset_right = 50.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Reel3" type="Control" parent="MainFrame/ReelArea/ReelContainer"]
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BG" type="ColorRect" parent="MainFrame/ReelArea/ReelContainer/Reel3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Icons" type="Control" parent="MainFrame/ReelArea/ReelContainer/Reel3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="IconTop" type="TextureRect" parent="MainFrame/ReelArea/ReelContainer/Reel3/Icons"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -150.0
+offset_right = 50.0
+offset_bottom = -50.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="IconMid" type="TextureRect" parent="MainFrame/ReelArea/ReelContainer/Reel3/Icons"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -50.0
+offset_right = 50.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="IconBot" type="TextureRect" parent="MainFrame/ReelArea/ReelContainer/Reel3/Icons"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = 50.0
+offset_right = 50.0
+offset_bottom = 150.0
 grow_horizontal = 2
 grow_vertical = 2
 expand_mode = 1
@@ -125,30 +290,34 @@ stretch_mode = 5
 
 [node name="ResultLabel" type="Label" parent="MainFrame"]
 layout_mode = 1
-anchors_preset = 5
+anchors_preset = 8
 anchor_left = 0.5
+anchor_top = 0.5
 anchor_right = 0.5
-offset_left = -150.0
-offset_top = 20.0
-offset_right = 150.0
-offset_bottom = 60.0
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -190.0
+offset_right = 200.0
+offset_bottom = -150.0
 grow_horizontal = 2
-theme_override_colors/font_color = Color(1, 0.9, 0, 1)
-theme_override_font_sizes/font_size = 24
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 28
 text = "SPIN TO WIN!"
 horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="EnergyBar" type="ProgressBar" parent="MainFrame"]
 layout_mode = 1
-anchors_preset = 12
+anchors_preset = 7
+anchor_left = 0.5
 anchor_top = 1.0
-anchor_right = 1.0
+anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = 50.0
-offset_top = -180.0
-offset_right = -50.0
-offset_bottom = -150.0
+offset_left = -120.0
+offset_top = -140.0
+offset_right = 120.0
+offset_bottom = -115.0
 grow_horizontal = 2
 grow_vertical = 0
 value = 50.0
@@ -161,6 +330,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_font_sizes/font_size = 14
 text = "50 / 100"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -172,12 +342,13 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -60.0
-offset_top = -140.0
-offset_right = 60.0
-offset_bottom = -100.0
+offset_left = -50.0
+offset_top = -105.0
+offset_right = 50.0
+offset_bottom = -75.0
 grow_horizontal = 2
 grow_vertical = 0
+theme_override_font_sizes/font_size = 16
 text = "BET X1"
 
 [node name="SpinBtn" type="Button" parent="MainFrame"]
@@ -188,10 +359,13 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -100.0
-offset_top = -80.0
+offset_top = -65.0
 offset_right = 100.0
-offset_bottom = 20.0
+offset_bottom = 15.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_font_sizes/font_size = 32
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 36
 text = "SPIN"

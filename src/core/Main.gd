@@ -10,6 +10,7 @@ var slot_machine_logic: SlotMachineLogic
 var npc_simulator: NPCSimulator
 var slot_machine_ui: SlotMachineUI
 var card_manager: CardManager
+var _pending_attack_count: int = 0
 
 
 func _ready() -> void:
@@ -35,6 +36,7 @@ func _ready() -> void:
 		slot_machine_ui = panel_scene.instantiate() as SlotMachineUI
 		if slot_machine_ui != null:
 			$HUDCanvas.add_child(slot_machine_ui)
+			slot_machine_ui.all_reels_stopped.connect(_on_slot_reels_stopped)
 			print("[Main] SlotMachinePanel loaded.")
 		else:
 			push_error("[Main] Failed to instantiate SlotMachinePanel.")
@@ -120,17 +122,32 @@ func _on_save_game_loaded() -> void:
 func _on_raid_triggered(_raid_count: int) -> void:
 	if npc_simulator != null:
 		npc_simulator.generate_raid_target()
-	_show_notification("🐷 RAID TRIGGERED! Finding target...")
+	# Notification is now handled in _on_slot_reels_stopped
 
 
 func _on_attack_triggered(_attack_count: int) -> void:
-	if npc_simulator != null:
-		npc_simulator.on_live_attack_triggered(_attack_count)
+	# Delay the attack logic until the spin animation ends
+	_pending_attack_count = _attack_count
 
 
 func _on_live_attack_resolved(data: Dictionary) -> void:
+	# Store message to be shown after spin animation if it was triggered by a spin
 	var msg: String = "⚔️ ATTACKED %s!\nBuilding %d damaged!" % [data["npc_name"], data["target_item_index"]]
 	_show_notification(msg)
+
+
+func _on_slot_reels_stopped(result: Dictionary) -> void:
+	# 1. Handle pending attack logic
+	if _pending_attack_count > 0:
+		if npc_simulator != null:
+			npc_simulator.on_live_attack_triggered(_pending_attack_count)
+		_pending_attack_count = 0
+		return # Attack notification will come from _on_live_attack_resolved
+
+	# 2. Handle raid notification
+	var type = result.get("type", "normal")
+	if type == "raid":
+		_show_notification("🐷 RAID TRIGGERED! Finding target...")
 
 
 func _show_notification(text: String) -> void:
