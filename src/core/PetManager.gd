@@ -21,7 +21,6 @@ const TIGER_ATTACK_MULTIPLIER: float = 5.10
 const VALID_PET_IDS: Array[String] = ["foxy", "tiger", "rhino"]
 
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
-var _session_active_pets: Array[String] = []
 
 signal pet_buff_tick(pet_id: String, seconds_remaining: int, is_new_activation: bool)
 signal pet_buff_expired(pet_id: String)

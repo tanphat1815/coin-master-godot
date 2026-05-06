@@ -1,0 +1,373 @@
+[gd_scene load_steps=1 format=3]
+
+[node name="TrainerPanel" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="panel_bg" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -230.0
+offset_top = -310.0
+offset_right = 230.0
+offset_bottom = 310.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="panel_color" type="ColorRect" parent="panel_bg"]
+layout_mode = 2
+color = Color(0.08, 0.08, 0.12, 0.97)
+
+[node name="border_top" type="ColorRect" parent="panel_bg"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 3)
+grow_horizontal = 2
+color = Color(0.4, 0.3, 0.0, 1.0)
+
+[node name="border_bottom" type="ColorRect" parent="panel_bg"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 3)
+grow_horizontal = 2
+color = Color(0.4, 0.3, 0.0, 1.0)
+
+[node name="border_left" type="ColorRect" parent="panel_bg"]
+layout_mode = 2
+custom_minimum_size = Vector2(3, 0)
+grow_vertical = 2
+color = Color(0.4, 0.3, 0.0, 1.0)
+
+[node name="border_right" type="ColorRect" parent="panel_bg"]
+layout_mode = 2
+custom_minimum_size = Vector2(3, 0)
+grow_vertical = 2
+color = Color(0.4, 0.3, 0.0, 1.0)
+
+[node name="margin" type="MarginContainer" parent="panel_bg"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 10
+
+[node name="vbox" type="VBoxContainer" parent="panel_bg/margin"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="title_bar" type="HBoxContainer" parent="panel_bg/margin/vbox"]
+layout_mode = 2
+
+[node name="title_bg" type="ColorRect" parent="panel_bg/margin/vbox/title_bar"]
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(0.4, 0.3, 0.0, 0.85)
+
+[node name="title_label" type="Label" parent="panel_bg/margin/vbox/title_bar"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.08, 0.05, 0.0, 1.0)
+theme_override_font_sizes/font_size = 14
+text = "DEVELOPER TRAINER"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="close_spacer" type="Control" parent="panel_bg/margin/vbox/title_bar"]
+custom_minimum_size = Vector2(6, 0)
+layout_mode = 2
+
+[node name="close_button" type="Button" parent="panel_bg/margin/vbox/title_bar"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(0.08, 0.05, 0.0, 1.0)
+theme_override_font_sizes/font_size = 18
+text = "X"
+
+[node name="sep0" type="HSeparator" parent="panel_bg/margin/vbox"]
+layout_mode = 2
+
+[node name="section_resources" type="VBoxContainer" parent="panel_bg/margin/vbox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="section_lbl" type="Label" parent="panel_bg/margin/vbox/section_resources"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.85, 0.4, 1.0)
+theme_override_font_sizes/font_size = 11
+text = "- RESOURCES -"
+horizontal_alignment = 1
+
+[node name="res_grid" type="GridContainer" parent="panel_bg/margin/vbox/section_resources"]
+layout_mode = 2
+theme_override_constants/h_separation = 6
+theme_override_constants/v_separation = 4
+columns = 3
+
+[node name="coin_lbl" type="Label" parent="panel_bg/margin/vbox/section_resources/res_grid"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1.0)
+text = "Coins:"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="coin_value" type="LineEdit" parent="panel_bg/margin/vbox/section_resources/res_grid"]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+placeholder_text = "0"
+
+[node name="coin_add_btn" type="Button" parent="panel_bg/margin/vbox/section_resources/res_grid"]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "+ ADD"
+
+[node name="spin_lbl" type="Label" parent="panel_bg/margin/vbox/section_resources/res_grid"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1.0)
+text = "Spins:"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="spin_value" type="LineEdit" parent="panel_bg/margin/vbox/section_resources/res_grid"]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+placeholder_text = "0"
+
+[node name="spin_add_btn" type="Button" parent="panel_bg/margin/vbox/section_resources/res_grid"]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "+ ADD"
+
+[node name="shield_lbl" type="Label" parent="panel_bg/margin/vbox/section_resources/res_grid"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1.0)
+text = "Shields:"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="shield_value" type="LineEdit" parent="panel_bg/margin/vbox/section_resources/res_grid"]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+placeholder_text = "0"
+
+[node name="shield_add_btn" type="Button" parent="panel_bg/margin/vbox/section_resources/res_grid"]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "+ ADD"
+
+[node name="sep1" type="HSeparator" parent="panel_bg/margin/vbox"]
+layout_mode = 2
+
+[node name="section_rng" type="VBoxContainer" parent="panel_bg/margin/vbox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="section_lbl" type="Label" parent="panel_bg/margin/vbox/section_rng"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.85, 0.4, 1.0)
+theme_override_font_sizes/font_size = 11
+text = "- RNG OVERRIDE -"
+horizontal_alignment = 1
+
+[node name="rng_option" type="OptionButton" parent="panel_bg/margin/vbox/section_rng"]
+layout_mode = 2
+item_count = 1
+popup/item_0/text = "(Random - Use RNG)"
+popup/item_0/id = 0
+
+[node name="rng_apply_btn" type="Button" parent="panel_bg/margin/vbox/section_rng"]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+text = "Apply to Next Spin"
+
+[node name="sep2" type="HSeparator" parent="panel_bg/margin/vbox"]
+layout_mode = 2
+
+[node name="section_events" type="VBoxContainer" parent="panel_bg/margin/vbox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="section_lbl" type="Label" parent="panel_bg/margin/vbox/section_events"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.85, 0.4, 1.0)
+theme_override_font_sizes/font_size = 11
+text = "- EVENT TRIGGERS -"
+horizontal_alignment = 1
+
+[node name="coin_craze_row" type="HBoxContainer" parent="panel_bg/margin/vbox/section_events"]
+layout_mode = 2
+
+[node name="coin_craze_btn" type="Button" parent="panel_bg/margin/vbox/section_events/coin_craze_row"]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Toggle CoinCraze"
+
+[node name="coin_craze_status" type="Label" parent="panel_bg/margin/vbox/section_events/coin_craze_row"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1.0)
+text = "Inactive"
+vertical_alignment = 1
+
+[node name="viking_quest_row" type="HBoxContainer" parent="panel_bg/margin/vbox/section_events"]
+layout_mode = 2
+
+[node name="viking_quest_btn" type="Button" parent="panel_bg/margin/vbox/section_events/viking_quest_row"]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Toggle Viking Quest"
+
+[node name="viking_quest_status" type="Label" parent="panel_bg/margin/vbox/section_events/viking_quest_row"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1.0)
+text = "Inactive"
+vertical_alignment = 1
+
+[node name="deactivate_all_btn" type="Button" parent="panel_bg/margin/vbox/section_events"]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+text = "Deactivate All Events"
+
+[node name="sep3" type="HSeparator" parent="panel_bg/margin/vbox"]
+layout_mode = 2
+
+[node name="section_pets" type="VBoxContainer" parent="panel_bg/margin/vbox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="section_lbl" type="Label" parent="panel_bg/margin/vbox/section_pets"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.85, 0.4, 1.0)
+theme_override_font_sizes/font_size = 11
+text = "- PET ACTIVATION -"
+horizontal_alignment = 1
+
+[node name="foxy_row" type="HBoxContainer" parent="panel_bg/margin/vbox/section_pets"]
+layout_mode = 2
+
+[node name="foxy_btn" type="Button" parent="panel_bg/margin/vbox/section_pets/foxy_row"]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Activate Foxy"
+
+[node name="foxy_status" type="Label" parent="panel_bg/margin/vbox/section_pets/foxy_row"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1.0)
+text = "Inactive"
+vertical_alignment = 1
+
+[node name="tiger_row" type="HBoxContainer" parent="panel_bg/margin/vbox/section_pets"]
+layout_mode = 2
+
+[node name="tiger_btn" type="Button" parent="panel_bg/margin/vbox/section_pets/tiger_row"]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Activate Tiger"
+
+[node name="tiger_status" type="Label" parent="panel_bg/margin/vbox/section_pets/tiger_row"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1.0)
+text = "Inactive"
+vertical_alignment = 1
+
+[node name="rhino_row" type="HBoxContainer" parent="panel_bg/margin/vbox/section_pets"]
+layout_mode = 2
+
+[node name="rhino_btn" type="Button" parent="panel_bg/margin/vbox/section_pets/rhino_row"]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Activate Rhino"
+
+[node name="rhino_status" type="Label" parent="panel_bg/margin/vbox/section_pets/rhino_row"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1.0)
+text = "Inactive"
+vertical_alignment = 1
+
+[node name="sep4" type="HSeparator" parent="panel_bg/margin/vbox"]
+layout_mode = 2
+
+[node name="section_cards" type="VBoxContainer" parent="panel_bg/margin/vbox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="section_lbl" type="Label" parent="panel_bg/margin/vbox/section_cards"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.85, 0.4, 1.0)
+theme_override_font_sizes/font_size = 11
+text = "- CARD CHESTS -"
+horizontal_alignment = 1
+
+[node name="chest_btn" type="Button" parent="panel_bg/margin/vbox/section_cards"]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+text = "Open 1 Gold Chest (Free)"
+
+[node name="chest_result" type="Label" parent="panel_bg/margin/vbox/section_cards"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1.0)
+text = ""
+horizontal_alignment = 1
+
+[node name="sep5" type="HSeparator" parent="panel_bg/margin/vbox"]
+layout_mode = 2
+
+[node name="section_save" type="VBoxContainer" parent="panel_bg/margin/vbox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="danger_bg" type="ColorRect" parent="panel_bg/margin/vbox/section_save"]
+layout_mode = 2
+color = Color(0.35, 0.0, 0.0, 0.25)
+
+[node name="section_lbl" type="Label" parent="panel_bg/margin/vbox/section_save"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1.0, 0.5, 0.5, 1.0)
+theme_override_font_sizes/font_size = 11
+text = "- DANGER ZONE -"
+horizontal_alignment = 1
+
+[node name="wipe_btn" type="Button" parent="panel_bg/margin/vbox/section_save"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_override_colors/font_color = Color(1.0, 0.8, 0.8, 1.0)
+text = "WIPE ALL SAVE DATA"
+
+[node name="wipe_confirm_label" type="Label" parent="panel_bg/margin/vbox/section_save"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.5, 0.5, 1.0)
+text = "Press WIPE again to confirm"
+horizontal_alignment = 1
+
+[node name="footer_hint" type="Label" parent="panel_bg/margin/vbox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.45, 0.45, 0.45, 1.0)
+text = "Toggle: Ctrl+Shift+T"
+horizontal_alignment = 1

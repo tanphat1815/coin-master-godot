@@ -14,16 +14,16 @@ var _shield_label: Label
 
 
 func _ready() -> void:
-	_coin_label   = $CoinPanel/CoinLabel   as Label
-	_spin_label   = $SpinPanel/SpinLabel   as Label
-	_shield_label = $ShieldPanel/ShieldLabel as Label
+	_coin_label   = $LeftHBox/CoinPanel/Margin/HBox/CoinLabel   as Label
+	_spin_label   = $RightHBox/SpinPanel/SpinLabel             as Label
+	_shield_label = $RightHBox/ShieldPanel/ShieldLabel           as Label
 
 	if _coin_label == null:
-		push_warning("[MainHUD] CoinLabel not found at $CoinPanel/CoinLabel.")
+		push_warning("[MainHUD] CoinLabel not found at new path.")
 	if _spin_label == null:
-		push_warning("[MainHUD] SpinLabel not found at $SpinPanel/SpinLabel.")
+		push_warning("[MainHUD] SpinLabel not found at new path.")
 	if _shield_label == null:
-		push_warning("[MainHUD] ShieldLabel not found at $ShieldPanel/ShieldLabel.")
+		push_warning("[MainHUD] ShieldLabel not found at new path.")
 
 	SaveLoadManager.coins_changed.connect(_on_coins_changed)
 	SaveLoadManager.spins_changed.connect(_on_spins_changed)

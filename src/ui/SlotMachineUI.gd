@@ -11,52 +11,51 @@ class_name SlotMachineUI
 const REEL_SPIN_DURATION: float = 1.5
 const REVEAL_DURATION: float = 0.4
 
+var _tex_coin   = preload("res://assets/sprites/ui/coin.svg")
+var _tex_energy = preload("res://assets/sprites/ui/energy.svg")
+var _tex_shield = preload("res://assets/sprites/ui/shield.svg")
+var _tex_attack = preload("res://assets/sprites/ui/attack.svg")
+var _tex_raid   = preload("res://assets/sprites/ui/raid.svg")
+
 var _spin_button: Button
 var _reel1: CanvasItem
 var _reel2: CanvasItem
 var _reel3: CanvasItem
 var _result_label: Label
 var _is_spinning: bool = false
-
+var _slot_logic: SlotMachineLogic
 
 func _ready() -> void:
 	# ── Cache node references ────────────────────────────────────────────────────
-	_spin_button  = $SpinButton  as Button
-	_reel1       = $ReelContainer/Reel1       as CanvasItem
-	_reel2       = $ReelContainer/Reel2       as CanvasItem
-	_reel3       = $ReelContainer/Reel3       as CanvasItem
-	_result_label = $ResultLabel as Label
-
+	_spin_button  = $MainFrame/SpinBtn
+	_result_label = $MainFrame/ResultLabel
+	_reel1       = $MainFrame/ReelArea/ReelContainer/Reel1
+	_reel2       = $MainFrame/ReelArea/ReelContainer/Reel2
+	_reel3       = $MainFrame/ReelArea/ReelContainer/Reel3
+	
 	if _spin_button == null:
-		push_error("[SlotMachineUI] SpinButton not found at $SpinButton.")
+		push_error("[SlotMachineUI] SpinButton not found at new path.")
 		return
 	if _reel1 == null or _reel2 == null or _reel3 == null:
-		push_error("[SlotMachineUI] One or more reel nodes not found.")
+		push_error("[SlotMachineUI] One or more reel nodes not found at new paths.")
 		return
-	if _result_label == null:
-		push_warning("[SlotMachineUI] ResultLabel not found at $ResultLabel.")
-
+	
 	# ── Initialize visual state ──────────────────────────────────────────────────
 	_result_label.text = "Spin to play!"
 	_result_label.modulate = Color.WHITE
-	_reel1.position = Vector2(0, 0)
-	_reel2.position = Vector2(0, 0)
-	_reel3.position = Vector2(0, 0)
+	_result_label.pivot_offset = _result_label.size / 2.0
 
 	# ── Wire button press ───────────────────────────────────────────────────────
 	_spin_button.pressed.connect(_on_spin_button_pressed)
 
 	# ── Subscribe to SlotMachineLogic signals ───────────────────────────────────
-	var slot_logic: SlotMachineLogic = _find_slot_logic()
-	if slot_logic != null:
-		slot_logic.spin_completed.connect(_on_spin_completed)
-		slot_logic.spin_failed_insufficient_spins.connect(_on_spin_failed)
-		slot_logic.raid_triggered.connect(_on_raid_triggered)
-		slot_logic.attack_triggered.connect(_on_attack_triggered)
-		slot_logic.shield_overflow_intercepted.connect(_on_shield_overflow)
+	_slot_logic = SlotMachineLogic.get_instance()
+	if _slot_logic != null:
+		_slot_logic.spin_completed.connect(_on_spin_completed)
+		_slot_logic.spin_failed_insufficient_spins.connect(_on_spin_failed)
 		print("[SlotMachineUI] Connected to SlotMachineLogic signals.")
 	else:
-		push_error("[SlotMachineUI] SlotMachineLogic node not found. Cannot connect signals.")
+		push_error("[SlotMachineUI] SlotMachineLogic node not found.")
 
 	# ── Initial button state ─────────────────────────────────────────────────────
 	_update_button_state()
@@ -100,68 +99,85 @@ func _on_spin_button_pressed() -> void:
 # ─── Animation ─────────────────────────────────────────────────────────────────
 
 func _play_spin_animation() -> void:
+	# We want reels to start at the same time, but each reel to follow its own sequence.
+	# So we create one tween and use parallel for the first movement of each reel.
 	var tween: Tween = create_tween()
-	tween.set_parallel(true)
+	var reel_y_offset: float = 40.0
 
-	var reel_y_offset: float = 60.0
+	# Reel 1
+	tween.tween_property(_reel1, "position:y", reel_y_offset, REEL_SPIN_DURATION * 0.2).set_trans(Tween.TRANS_SINE)
+	tween.tween_property(_reel1, "position:y", -reel_y_offset, REEL_SPIN_DURATION * 0.2).set_trans(Tween.TRANS_SINE)
+	tween.tween_property(_reel1, "position:y", 0.0, REEL_SPIN_DURATION * 0.2).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
-	# Reel 1: three-segment oscillation
-	tween.tween_property(_reel1, "position:y", reel_y_offset, REEL_SPIN_DURATION * 0.33) \
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	tween.tween_property(_reel1, "position:y", 0.0, REEL_SPIN_DURATION * 0.33) \
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	tween.tween_property(_reel1, "position:y", reel_y_offset, REEL_SPIN_DURATION * 0.34) \
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	# Reel 2 (Start parallel to Reel 1)
+	tween.parallel().tween_property(_reel2, "position:y", reel_y_offset, REEL_SPIN_DURATION * 0.25).set_trans(Tween.TRANS_SINE)
+	tween.tween_property(_reel2, "position:y", -reel_y_offset, REEL_SPIN_DURATION * 0.25).set_trans(Tween.TRANS_SINE)
+	tween.tween_property(_reel2, "position:y", 0.0, REEL_SPIN_DURATION * 0.25).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
-	# Reel 2: phase-offset oscillation
-	tween.tween_property(_reel2, "position:y", reel_y_offset, REEL_SPIN_DURATION * 0.28) \
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	tween.tween_property(_reel2, "position:y", 0.0, REEL_SPIN_DURATION * 0.36) \
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	tween.tween_property(_reel2, "position:y", reel_y_offset, REEL_SPIN_DURATION * 0.36) \
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-
-	# Reel 3: different speed for visual variety
-	tween.tween_property(_reel3, "position:y", reel_y_offset, REEL_SPIN_DURATION * 0.40) \
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	tween.tween_property(_reel3, "position:y", 0.0, REEL_SPIN_DURATION * 0.30) \
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	tween.tween_property(_reel3, "position:y", reel_y_offset, REEL_SPIN_DURATION * 0.30) \
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	# Reel 3 (Start parallel to Reel 1)
+	tween.parallel().tween_property(_reel3, "position:y", reel_y_offset, REEL_SPIN_DURATION * 0.3).set_trans(Tween.TRANS_SINE)
+	tween.tween_property(_reel3, "position:y", -reel_y_offset, REEL_SPIN_DURATION * 0.3).set_trans(Tween.TRANS_SINE)
+	tween.tween_property(_reel3, "position:y", 0.0, REEL_SPIN_DURATION * 0.3).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
 	# Result label pulse while spinning
-	var pulse_tween: Tween = create_tween()
-	pulse_tween.set_parallel(true)
-	pulse_tween.tween_property(_result_label, "modulate:a", 0.4, REEL_SPIN_DURATION * 0.5)
-	pulse_tween.tween_property(_result_label, "modulate:a", 1.0, REEL_SPIN_DURATION * 0.5)
+	var pulse_tween: Tween = create_tween().set_loops()
+	pulse_tween.tween_property(_result_label, "modulate:a", 0.3, 0.3)
+	pulse_tween.tween_property(_result_label, "modulate:a", 1.0, 0.3)
+	
+	# Stop pulse when main tween finishes
+	tween.finished.connect(func(): pulse_tween.kill(); _result_label.modulate.a = 1.0)
 
 	print("[SlotMachineUI] Spin animation started. Duration: %.1fs." % REEL_SPIN_DURATION)
 
 
-func _play_reveal_animation(tier: String) -> void:
+func _play_reveal_animation(result: Dictionary) -> void:
+	var reward_type: String = str(result.get("reward_type", "coins"))
+	var tier: String = str(result.get("reward_tier", "small"))
+	
 	var target_color: Color = Color.WHITE
-	match tier:
-		"large", "jackpot":
-			target_color = Color.GOLD
-		"medium":
-			target_color = Color.SILVER
-		_:
-			target_color = Color.WHITE
+	var texture: Texture2D = _tex_coin
+	
+	match reward_type:
+		"coins":
+			target_color = Color(1.0, 1.0, 0.9)
+			texture = _tex_coin
+		"spins":
+			target_color = Color(0.9, 0.9, 1.0)
+			texture = _tex_energy
+		"shield":
+			target_color = Color(0.95, 0.95, 1.0)
+			texture = _tex_shield
+		"attack":
+			target_color = Color(1.0, 0.9, 0.9)
+			texture = _tex_attack
+		"raid":
+			target_color = Color(1.0, 0.9, 1.0)
+			texture = _tex_raid
 
-	# Scale pop: up to 1.2x then back to 1.0x (sequential)
+	# Update Reels
+	for reel in [_reel1, _reel2, _reel3]:
+		reel.color = target_color
+		var icon_rect = reel.get_node_or_null("Icon")
+		if icon_rect:
+			icon_rect.texture = texture
+
+	# Scale pop for the result label
 	var scale_tween: Tween = create_tween()
 	scale_tween.tween_property(_result_label, "scale", Vector2(1.2, 1.2), REVEAL_DURATION * 0.4) \
 		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	scale_tween.tween_property(_result_label, "scale", Vector2(1.0, 1.0), REVEAL_DURATION * 0.6) \
 		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
 
-	# Color flash
+	# Color flash for the result label
+	var flash_color: Color = Color.WHITE
+	if tier == "large" or tier == "jackpot": flash_color = Color.GOLD
+	
 	var color_tween: Tween = create_tween()
 	color_tween.set_parallel(true)
-	color_tween.tween_property(_result_label, "modulate", target_color, REVEAL_DURATION * 0.3)
+	color_tween.tween_property(_result_label, "modulate", flash_color, REVEAL_DURATION * 0.3)
 	color_tween.tween_property(_result_label, "modulate", Color.WHITE, REVEAL_DURATION * 0.7)
 
-	print("[SlotMachineUI] Reveal animation played. Tier: %s" % tier)
+	print("[SlotMachineUI] Reveal animation played. Reward: %s (%s)" % [reward_type, tier])
 
 
 # ─── Spin Result Handler ───────────────────────────────────────────────────────
@@ -173,7 +189,8 @@ func _on_spin_completed(result: Dictionary) -> void:
 
 	var reward_type:   String = str(result.get("reward_type", ""))
 	var reward_value:  int    = int(result.get("reward_value", 0))
-	var reward_tier:   String = str(result.get("reward_tier", "small"))
+	# reward_tier and was_intercepted are used implicitly or can be underscored if needed
+	var _reward_tier:  String = str(result.get("reward_tier", "small"))
 	var was_intercepted: bool = bool(result.get("was_intercepted", false))
 
 	var display_text: String
@@ -196,7 +213,7 @@ func _on_spin_completed(result: Dictionary) -> void:
 		display_text = "Shields Full! +%d Coins" % comp
 
 	_result_label.text = display_text
-	_play_reveal_animation(reward_tier)
+	_play_reveal_animation(result)
 
 	await get_tree().create_timer(REEL_SPIN_DURATION + REVEAL_DURATION).timeout
 	_finalize_spin_complete()
