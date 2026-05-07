@@ -77,6 +77,7 @@ func _ready() -> void:
 
 func _setup_initial_icons(container: Control) -> void:
 	var textures = [_tex_coin, _tex_energy, _tex_shield, _tex_attack, _tex_raid]
+	# Randomize each slot independently at start
 	container.get_node("IconTop").texture = textures.pick_random()
 	container.get_node("IconMid").texture = textures.pick_random()
 	container.get_node("IconBot").texture = textures.pick_random()
@@ -101,57 +102,64 @@ func _on_spin_completed(result: Dictionary) -> void:
 func _play_spin_animation() -> void:
 	_is_spinning = true
 	_update_button_state()
-
+	
 	var stop_flags = [false, false, false]
-
+	
+	# Start scrolling for each reel
 	_scroll_reel(0, stop_flags)
 	_scroll_reel(1, stop_flags)
 	_scroll_reel(2, stop_flags)
-
+	
+	# Staggered stop sequence
 	await get_tree().create_timer(1.2).timeout
 	stop_flags[0] = true
 	await get_tree().create_timer(0.6).timeout
 	stop_flags[1] = true
 	await get_tree().create_timer(0.6).timeout
 	stop_flags[2] = true
+	
+	# Wait a small bit for the last elastic bounce to finish
+	await get_tree().create_timer(0.5).timeout
+	_finalize_spin_visuals()
 
 
-func _scroll_reel(index: int, stop_flags: Array) -> void:
-	var container = _icons_containers[index]
+func _scroll_reel(reel_index: int, stop_flags: Array) -> void:
+	var container = _icons_containers[reel_index]
 	var textures = [_tex_coin, _tex_energy, _tex_shield, _tex_attack, _tex_raid]
-	var target_tex = _get_texture_for_type(_pending_result["reward_type"])
-
-	var speed = 2200.0
-
-	while true:
+	var speed = 1500.0 # Fast spin speed
+	
+	while not stop_flags[reel_index]:
 		var delta = get_process_delta_time()
-		if delta == 0: delta = 1.0/60.0
-
+		if delta == 0: delta = 1.0/60.0 # Fallback
+		
 		container.position.y += speed * delta
-
+		
+		# Wrap around when moving 100 pixels (the height of one icon slot)
 		if container.position.y >= 100.0:
 			container.position.y -= 100.0
+			# Shift textures down: Top -> Mid, Mid -> Bot
 			container.get_node("IconBot").texture = container.get_node("IconMid").texture
 			container.get_node("IconMid").texture = container.get_node("IconTop").texture
-
-			if stop_flags[index]:
-				container.get_node("IconMid").texture = target_tex
-				container.position.y = 0
-				_play_stop_bounce(container)
-				break
-			else:
-				container.get_node("IconTop").texture = textures.pick_random()
-
+			# New random icon for top
+			container.get_node("IconTop").texture = textures.pick_random()
+		
 		await get_tree().process_frame
 
-	if index == 2:
-		_finalize_spin_visuals()
-
-
-func _play_stop_bounce(container: Control) -> void:
+	# Smoothly snap to final result
+	var target_type = _pending_result["reward_type"]
+	var target_tex = _get_texture_for_type(target_type)
+	
+	# Final shift to ensure IconMid is our result
+	container.get_node("IconBot").texture = container.get_node("IconMid").texture
+	container.get_node("IconMid").texture = target_tex
+	container.get_node("IconTop").texture = textures.pick_random()
+	
+	# Elastic bounce to y=0
+	container.position.y = -50 # Start slightly above for a bounce effect
 	var tween = create_tween()
-	container.position.y = -40
-	tween.tween_property(container, "position:y", 0.0, 0.4).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
+	tween.set_ease(Tween.EASE_OUT)
+	tween.set_trans(Tween.TRANS_ELASTIC)
+	tween.tween_property(container, "position:y", 0, 0.5)
 
 
 func _finalize_spin_visuals() -> void:
@@ -207,6 +215,8 @@ func _get_texture_for_type(type: String) -> Texture2D:
 func _update_button_state() -> void:
 	_spin_button.disabled = _is_spinning
 	_spin_button.modulate = Color(0.6, 0.6, 0.6) if _is_spinning else Color.WHITE
+	if _bet_button != null:
+		_bet_button.disabled = _is_spinning
 
 
 func _on_bet_button_pressed() -> void:

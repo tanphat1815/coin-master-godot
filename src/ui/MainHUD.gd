@@ -66,14 +66,24 @@ func _on_shields_changed(new_value: int) -> void:
 
 func _update_coin_label(value: int) -> void:
 	if _coin_label != null:
-		_coin_label.text = "%d" % value
+		_coin_label.text = _format_large_number(value)
 
 
 func _update_spin_label(value: int) -> void:
 	if _spin_label != null:
-		_spin_label.text = "%d" % value
+		_spin_label.text = _format_large_number(value)
 
 
 func _update_shield_label(value: int) -> void:
 	if _shield_label != null:
 		_shield_label.text = "%d/5" % value
+
+
+func _format_large_number(n: int) -> String:
+	if n >= 1_000_000_000:
+		return "%.1fB" % (n / 1_000_000_000.0)
+	if n >= 1_000_000:
+		return "%.1fM" % (n / 1_000_000.0)
+	if n >= 1_000:
+		return "%.1fK" % (n / 1_000.0)
+	return str(n)
